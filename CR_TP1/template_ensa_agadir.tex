@@ -1,0 +1,1001 @@
+\documentclass[11pt, a4paper]{article}
+
+% ========================================
+% PACKAGES DE BASE
+% ========================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{geometry}
+\geometry{a4paper, margin=2.5cm}
+
+% ========================================
+% PACKAGES POUR LA MISE EN PAGE
+% ========================================
+\usepackage{graphicx}
+\usepackage{float} % Pour le positionnement précis des figures et tableaux
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{array}
+\usepackage{booktabs} % Pour de meilleurs tableaux
+
+% hyperref doit être chargé en dernier
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+}
+
+% ========================================
+% CONFIGURATION EN-TÊTE ET PIED DE PAGE
+% ========================================
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhf{}
+\fancyfoot[L]{\begin{tabular}[t]{@{}l@{}}NOM Prénom 1 \\ NOM Prénom 2 \\ NOM Prénom 3\end{tabular}}
+\fancyfoot[R]{\textbf{Page \thepage/\pageref{LastPage}}}
+
+\parindent=0cm % Désactive les alinéas
+
+% ========================================
+% INFORMATIONS DU DOCUMENT (À PERSONNALISER)
+% ========================================
+\newcommand{\monTitre}{TP N°1 : Virtualisation}
+\newcommand{\monSousTitre}{Installer et Configurer une Machine Virtuelle Personnalisée sur VMware Workstation Pro}
+\newcommand{\maFiliere}{Filière : Informatique}
+\newcommand{\monAnnee}{Année : 2024-2025}
+\newcommand{\monEtudiantUn}{Youssefi}
+\newcommand{\monEtudiantDeux}{NOM Prénom 2}
+\newcommand{\monEtudiantTrois}{NOM Prénom 3}
+\newcommand{\monProfesseur}{Prof. Youssefi}
+
+% ========================================
+% DÉBUT DU DOCUMENT
+% ========================================
+\begin{document}
+
+% ========================================
+% PAGE DE GARDE
+% ========================================
+\begin{titlepage}
+    \centering
+    \vspace*{1cm}
+    
+    % Logos (assurez-vous d'avoir les images dans un dossier 'figures')
+    \includegraphics[width=0.4\textwidth]{figures/ENSAA.png}
+    \hfill
+    \includegraphics[width=0.4\textwidth]{figures/UIZ.png}
+    
+    \vspace{2cm}
+    
+    % En-tête de l'établissement
+    {\scshape\LARGE École Nationale des Sciences Appliquées d'Agadir\par}
+    \vspace{0.5cm}
+    {\scshape\Large \maFiliere\par}
+    
+    \vspace{1.5cm}
+    
+    % Titre du document
+    {\huge\bfseries \monTitre\par}
+    \vspace{0.5cm}
+    {\Large\bfseries \monSousTitre\par}
+    
+    \vspace{2cm}
+    
+    % Auteurs
+    \large
+    \textit{Réalisé par :} \\
+    \vspace{0.5cm}
+    \textbf{\monEtudiantUn} \\
+    \textbf{\monEtudiantDeux} \\
+    \textbf{\monEtudiantTrois} \\
+    
+    \vspace{0.5cm}
+    
+    % Encadrant
+    \textit{Encadré par :} \\
+    \textbf{\monProfesseur}
+
+    \vfill
+    
+    % Pied de page
+    {\large Année Universitaire : \monAnnee\par}
+    \vspace{1cm}
+    {\large Date : \today\par}
+    
+\end{titlepage}
+
+% ========================================
+% TABLE DES MATIÈRES
+% ========================================
+\tableofcontents
+\newpage
+
+% ========================================
+% INTRODUCTION
+% ========================================
+\section{Introduction}
+
+La virtualisation est une technologie fondamentale dans l'informatique moderne qui permet d'exécuter plusieurs systèmes d'exploitation sur une même machine physique. Ce TP a pour objectifs de :
+
+\begin{itemize}
+    \item Étudier et comparer des outils de virtualisation
+    \item Créer et configurer une machine virtuelle personnalisée avec VMware Workstation Pro
+    \item Comprendre les différents paramètres de configuration d'une VM
+\end{itemize}
+
+VMware Workstation est un hyperviseur de type 2 qui permet de faire tourner une machine virtuelle sur un ordinateur. Les intérêts d'avoir une machine virtuelle sont multiples :
+
+\begin{itemize}
+    \item Tester et utiliser une application sur différents OS pour les développeurs
+    \item Tester un OS sans formater la machine physique
+    \item Créer un petit réseau de plusieurs VMs (test des protocoles réseau, des règles de pare-feu)
+    \item Faire des tests de communications simples avec une deuxième machine
+    \item Visiter des sites « louches » en toute sécurité
+    \item Tester les conséquences de tel ou tel virus
+\end{itemize}
+
+Ce compte rendu est structuré en deux parties principales : une étude comparative théorique des outils de virtualisation et un TP pratique d'installation et configuration d'une machine virtuelle Windows 10 sur VMware Workstation Pro.
+
+% ========================================
+% PARTIE 1 : ÉTUDE COMPARATIVE
+% ========================================
+\section{Partie 1 : Étude Comparative des Solutions de Virtualisation}
+
+Cette partie présente une étude comparative de trois solutions de virtualisation : VMware Player Free Edition, VMware Workstation Pro et VirtualBox.
+
+\subsection{Tableau Comparatif}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|p{3.5cm}|}
+\hline
+\textbf{Critères} & \textbf{VMware Player Free} & \textbf{VMware Workstation Pro} & \textbf{VirtualBox} \\ \hline
+
+\textbf{Type de virtualisation} & Hyperviseur de type 2 (hosted) & Hyperviseur de type 2 (hosted) & Hyperviseur de type 2 (hosted) \\ \hline
+
+\textbf{Prérequis matériel} & 
+- CPU 64-bit avec VT-x/AMD-V
+- 2 GB RAM minimum
+- 1 GB espace disque &
+- CPU 64-bit avec VT-x/AMD-V
+- 4 GB RAM minimum
+- 5 GB espace disque &
+- CPU avec VT-x/AMD-V
+- 2 GB RAM minimum
+- 30 MB espace disque \\ \hline
+
+\textbf{OS supportés (Hôte)} & 
+Windows, Linux & 
+Windows, Linux & 
+Windows, Linux, macOS, Solaris \\ \hline
+
+\textbf{OS supportés (Invité)} & 
+Windows, Linux, BSD, Solaris &
+Plus de 200 OS incluant Windows, Linux, BSD, Solaris, macOS &
+Windows, Linux, BSD, Solaris, macOS, OS/2 \\ \hline
+
+\textbf{Fonctionnalités principales} & 
+- Exécution basique de VMs
+- Snapshots (limité)
+- Partage de fichiers &
+- Snapshots multiples
+- Clonage de VMs
+- Équipes de VMs
+- Mode Unity
+- Chiffrement de VMs
+- Intégration vSphere &
+- Snapshots
+- Clonage de VMs
+- Partage de fichiers
+- USB 3.0
+- Réseau virtuel avancé
+- Open Source \\ \hline
+
+\textbf{Sécurité} & 
+- Isolation basique
+- Pas de chiffrement &
+- Chiffrement 256-bit
+- TPM virtuel
+- Secure Boot UEFI &
+- Isolation basique
+- Secure Boot UEFI \\ \hline
+
+\textbf{Licence \& Prix} & 
+Gratuit (usage personnel) &
+Payant (\textasciitilde 250\$) - Essai 30 jours &
+Gratuit (Open Source - GPL v2) \\ \hline
+
+\textbf{Part de marché} & 
+\textasciitilde 15\% (utilisateurs individuels) &
+\textasciitilde 45\% (entreprises et professionnels) &
+\textasciitilde 35\% (tous segments) \\ \hline
+
+\end{tabular}
+\caption{Comparaison des solutions de virtualisation}
+\label{tab:comparaison}
+\end{table}
+
+\subsection{Analyse}
+
+\textbf{VMware Workstation Pro} se distingue par ses fonctionnalités avancées destinées aux professionnels et développeurs. Il offre une performance optimale et des options de sécurité robustes, justifiant son coût.
+
+\textbf{VMware Player Free Edition} est une version simplifiée adaptée aux utilisateurs débutants souhaitant tester la virtualisation sans investissement financier.
+
+\textbf{VirtualBox} est une solution open-source complète et gratuite, supportant le plus grand nombre de systèmes d'exploitation hôtes. Elle est particulièrement populaire dans le milieu éducatif et chez les développeurs.
+
+% ========================================
+% PARTIE 2 : INSTALLATION ET CONFIGURATION
+% ========================================
+\section{Partie 2 : Installation et Configuration d'une VM sur VMware Workstation Pro}
+
+\subsection{Prérequis}
+
+\subsubsection{Prérequis Logiciels}
+
+\begin{itemize}
+    \item VMware Workstation Pro 17.6 (ou version 16+)
+    \item Image ISO de Windows 10 64-bit
+    \item Connexion Internet pour l'installation
+\end{itemize}
+
+\subsubsection{Prérequis Matériels}
+
+\begin{itemize}
+    \item Processeur 64-bit compatible (Intel VT-x ou AMD-V)
+    \item Minimum 4 GB de RAM (8 GB recommandé)
+    \item Au moins 60 GB d'espace disque disponible
+    \item Lecteur optique ou fichier ISO
+\end{itemize}
+
+\subsection{Activation de la Virtualisation}
+
+Avant de commencer l'installation de VMware, il est crucial de vérifier que la virtualisation matérielle est activée dans le BIOS/UEFI :
+
+\begin{enumerate}
+    \item Redémarrer l'ordinateur
+    \item Appuyer sur la touche appropriée (F2, Suppr, F10, etc.) pour accéder au BIOS
+    \item Naviguer vers "Advanced" ou "CPU Configuration"
+    \item Activer "Intel VT-x" ou "AMD-V"
+    \item Sauvegarder (F10) et redémarrer
+\end{enumerate}
+
+\textit{Alternative pour Windows 10 :}
+\begin{enumerate}
+    \item Paramètres $\rightarrow$ Mise à jour et sécurité $\rightarrow$ Récupération
+    \item Démarrage avancé $\rightarrow$ Redémarrer maintenant
+    \item Résoudre les problèmes $\rightarrow$ Options avancées
+    \item Paramètres du microprogramme UEFI $\rightarrow$ Redémarrer
+\end{enumerate}
+
+\subsection{Installation de VMware Workstation Pro}
+
+\textbf{Question 1 :} Détaillez sous formes de captures écrans les étapes de l'installation VMware Workstation Pro sous Windows 10.
+
+\subsubsection{Téléchargement}
+
+La version VMware Workstation Pro 17.6 a été téléchargée depuis le site officiel. Le fichier d'installation fait 447.97 MB.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/1.png}
+    \caption{Page de téléchargement VMware Workstation Pro 17.6}
+    \label{fig:download}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/3.png}
+    \caption{Fichier d'installation dans le dossier Downloads (447 MB)}
+    \label{fig:file}
+\end{figure}
+
+\subsubsection{Processus d'Installation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/4.png}
+    \caption{Assistant d'installation - Écran de bienvenue}
+    \label{fig:welcome}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/5.png}
+    \caption{Acceptation du contrat de licence (EULA)}
+    \label{fig:eula}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/6.png}
+    \caption{Installation des pilotes de réseau virtuel en cours}
+    \label{fig:drivers}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/7.png}
+    \caption{Fin de l'installation - Assistant complété}
+    \label{fig:complete}
+\end{figure}
+
+L'installation s'est déroulée avec succès. Les principales étapes sont :
+\begin{enumerate}
+    \item Lancement du fichier .exe
+    \item Acceptation de la licence
+    \item Choix du répertoire d'installation
+    \item Installation des pilotes réseau virtuels
+    \item Finalisation
+\end{enumerate}
+
+% ========================================
+% CRÉATION DE LA MACHINE VIRTUELLE
+% ========================================
+\section{Création de la Machine Virtuelle Personnalisée}
+
+\subsection{Interface de VMware Workstation Pro}
+
+Après l'installation, l'interface principale de VMware Workstation Pro s'affiche avec trois options :
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/8.png}
+    \caption{Interface principale de VMware Workstation Pro 17}
+    \label{fig:interface}
+\end{figure}
+
+Les trois options principales sont :
+\begin{itemize}
+    \item \textbf{Create a New Virtual Machine} : Créer une nouvelle VM
+    \item \textbf{Open a Virtual Machine} : Ouvrir une VM existante
+    \item \textbf{Connect to a Remote Server} : Se connecter à un serveur distant
+\end{itemize}
+
+\subsection{Choix du Type de Configuration}
+
+\textbf{Question 2 :} Quelle est la différence entre les 2 types de VM « Typical » et « Custom » ?
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/9.png}
+    \caption{Sélection du type de configuration - Custom (advanced)}
+    \label{fig:custom}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{itemize}
+    \item \textbf{Typical (Recommandé)} : Configuration automatique avec des paramètres par défaut optimisés pour l'OS invité. Processus rapide et simple, idéal pour les débutants.
+    
+    \item \textbf{Custom (Advanced)} : Configuration détaillée permettant de personnaliser tous les paramètres (processeur, mémoire, type de disque, contrôleur, réseau, etc.). Offre un contrôle total sur la VM, recommandé pour les utilisateurs avancés ou des besoins spécifiques.
+\end{itemize}
+
+Dans ce TP, nous avons choisi \textbf{Custom (advanced)} pour mieux comprendre chaque paramètre de configuration.
+
+\subsection{Compatibilité Matérielle}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/10.png}
+    \caption{Sélection de la compatibilité matérielle - Workstation 17.5}
+    \label{fig:compatibility}
+\end{figure}
+
+La compatibilité matérielle choisie est \textbf{Workstation 17.5 or later}, qui permet :
+\begin{itemize}
+    \item Jusqu'à 128 GB de mémoire RAM
+    \item Jusqu'à 32 processeurs virtuels
+    \item Support des dernières fonctionnalités matérielles
+\end{itemize}
+
+\subsection{Installation du Système d'Exploitation}
+
+\textbf{Question 3 :} Quelle est la différence entre ces deux méthodes d'installation ?
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/11.png}
+    \caption{Options d'installation du système d'exploitation}
+    \label{fig:install_options}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{itemize}
+    \item \textbf{Installer disc} : Utilise un CD/DVD physique inséré dans le lecteur optique de la machine hôte. Nécessite un support physique.
+    
+    \item \textbf{Installer disc image file (ISO)} : Utilise un fichier image ISO stocké sur le disque dur. Plus pratique, rapide, et ne nécessite pas de support physique. C'est la méthode la plus utilisée actuellement.
+    
+    \item \textbf{I will install the operating system later} : Crée une VM vide sans OS. L'installation sera faite manuellement après la création de la VM.
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/12.png}
+    \caption{Sélection du fichier ISO Windows 10 - Détection automatique}
+    \label{fig:iso}
+\end{figure}
+
+Le système a détecté automatiquement Windows 10 x64 et propose l'installation facile (Easy Install).
+
+\subsection{Configuration Easy Install}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/13.png}
+    \caption{Configuration Easy Install - Windows 10 Education}
+    \label{fig:easy_install}
+\end{figure}
+
+Les paramètres Easy Install configurés :
+\begin{itemize}
+    \item \textbf{Version} : Windows 10 Education
+    \item \textbf{Nom complet} : admin
+    \item \textbf{Mot de passe} : (configuré)
+    \item \textbf{Connexion automatique} : Activée
+\end{itemize}
+
+\subsection{Définition du Système d'Exploitation}
+
+\textbf{Question 4 :} À quoi sert cette étape lors de la définition du système d'exploitation ? Et que signifie le choix « Other » ?
+
+\textbf{Réponse :}
+
+Cette étape permet à VMware de :
+\begin{itemize}
+    \item Optimiser automatiquement les paramètres (RAM, disque, etc.) selon l'OS
+    \item Installer les VMware Tools appropriés
+    \item Configurer les pilotes virtuels compatibles
+    \item Activer les fonctionnalités spécifiques à l'OS
+\end{itemize}
+
+Le choix \textbf{« Other »} est utilisé pour :
+\begin{itemize}
+    \item Les systèmes d'exploitation non listés ou très anciens
+    \item Les OS personnalisés ou expérimentaux
+    \item Les distributions Linux non reconnues
+\end{itemize}
+
+\subsection{Nom et Emplacement de la VM}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/14.png}
+    \caption{Nom de la machine virtuelle : Windows 10 x64}
+    \label{fig:name}
+\end{figure}
+
+La VM est nommée \textbf{Windows 10 x64} et sera stockée dans le répertoire par défaut de VMware.
+
+\subsection{Périphérique de Démarrage}
+
+\textbf{Question 5 :} Quelle est la différence entre les types de périphérique de démarrage BIOS et EFI ?
+
+\textbf{Réponse :}
+
+\begin{itemize}
+    \item \textbf{BIOS (Basic Input/Output System)} :
+    \begin{itemize}
+        \item Technologie ancienne (années 1980)
+        \item Limite de 2,2 TB pour les disques
+        \item Temps de démarrage plus lent
+        \item Mode 16-bit
+        \item Compatible avec les anciens OS
+    \end{itemize}
+    
+    \item \textbf{EFI/UEFI (Unified Extensible Firmware Interface)} :
+    \begin{itemize}
+        \item Technologie moderne
+        \item Support de disques $>$ 2,2 TB (GPT)
+        \item Démarrage plus rapide (Secure Boot)
+        \item Mode 32/64-bit
+        \item Interface graphique
+        \item Meilleure sécurité (Secure Boot)
+        \item Requis pour Windows 11
+    \end{itemize}
+\end{itemize}
+
+Pour Windows 10, le BIOS est suffisant, mais UEFI est recommandé pour les nouvelles installations.
+
+\subsection{Configuration du Processeur}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/15.png}
+    \caption{Configuration processeur : 2 processeurs × 1 cœur = 2 cœurs}
+    \label{fig:cpu}
+\end{figure}
+
+Configuration choisie :
+\begin{itemize}
+    \item \textbf{Nombre de processeurs} : 2
+    \item \textbf{Nombre de cœurs par processeur} : 1
+    \item \textbf{Total} : 2 cœurs logiques
+\end{itemize}
+
+\textbf{Note importante} : Ne pas surévaluer les besoins pour éviter de surcharger le processeur physique. Le maximum dépend de la version hardware sélectionnée.
+
+\subsection{Configuration de la Mémoire}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/16.png}
+    \caption{Allocation mémoire : 2048 MB (2 GB)}
+    \label{fig:memory}
+\end{figure}
+
+\begin{itemize}
+    \item \textbf{Mémoire allouée} : 2048 MB (2 GB)
+    \item \textbf{Minimum recommandé} : 2048 MB
+    \item \textbf{Maximum recommandé} : 20,8 GB
+\end{itemize}
+
+La mémoire allouée correspond au minimum recommandé pour Windows 10.
+
+\subsection{Configuration Réseau}
+
+\textbf{Question 6 :} Expliquez la différence entre les quatre types de réseau de la machine virtuelle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/17.png}
+    \caption{Type de réseau NAT}
+    \label{fig:nat}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/18.png}
+    \caption{Type de réseau Host-only (choisi)}
+    \label{fig:hostonly}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{enumerate}
+    \item \textbf{Use bridged networking} :
+    \begin{itemize}
+        \item La VM est directement connectée au réseau physique
+        \item Obtient une IP du routeur (même réseau que l'hôte)
+        \item Visible par les autres machines du réseau
+        \item Idéal pour serveurs ou tests réseaux réels
+    \end{itemize}
+    
+    \item \textbf{Use network address translation (NAT)} :
+    \begin{itemize}
+        \item La VM partage l'IP de l'hôte
+        \item Accès Internet via l'hôte
+        \item Invisible du réseau externe
+        \item Configuration réseau la plus simple
+    \end{itemize}
+    
+    \item \textbf{Use host-only networking} :
+    \begin{itemize}
+        \item Réseau privé isolé entre l'hôte et les VMs
+        \item Pas d'accès Internet (sauf configuration avancée)
+        \item Communication uniquement hôte $\leftrightarrow$ VMs
+        \item Idéal pour tests en environnement isolé
+    \end{itemize}
+    
+    \item \textbf{Do not use a network connection} :
+    \begin{itemize}
+        \item Aucune connexion réseau
+        \item VM totalement isolée
+        \item Pour tests hors ligne ou sécurité maximale
+    \end{itemize}
+\end{enumerate}
+
+Dans ce TP, nous avons choisi \textbf{Host-only networking} pour un environnement de test isolé.
+
+\subsection{Contrôleur SCSI}
+
+\textbf{Question 7 :} Expliquez la différence entre les types de contrôleurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/19.png}
+    \caption{Sélection du contrôleur LSI Logic SAS}
+    \label{fig:scsi}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{itemize}
+    \item \textbf{BusLogic} :
+    \begin{itemize}
+        \item Ancien contrôleur (années 1990)
+        \item Compatible avec les anciens OS (Windows NT, 2000)
+        \item Performances limitées
+    \end{itemize}
+    
+    \item \textbf{LSI Logic} :
+    \begin{itemize}
+        \item Contrôleur moderne
+        \item Meilleure performance que BusLogic
+        \item Compatible avec la plupart des OS récents
+    \end{itemize}
+    
+    \item \textbf{LSI Logic SAS} :
+    \begin{itemize}
+        \item Version améliorée de LSI Logic
+        \item Support SAS (Serial Attached SCSI)
+        \item Meilleures performances I/O
+        \item Recommandé pour Windows Vista et ultérieur
+        \item Support jusqu'à 15 000 RPM
+    \end{itemize}
+\end{itemize}
+
+Le choix \textbf{LSI Logic SAS} est recommandé par VMware pour Windows 10.
+
+\subsection{Type de Disque Virtuel}
+
+\textbf{Question 8 :} Définissez et expliquez le rôle de chaque type de disque.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/20.png}
+    \caption{Type de disque : NVMe (recommandé)}
+    \label{fig:nvme}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{enumerate}
+    \item \textbf{IDE (Integrated Drive Electronics)} :
+    \begin{itemize}
+        \item Technologie ancienne (1986)
+        \item Vitesse limitée (133 MB/s max)
+        \item Utilisé pour les anciens OS
+        \item Maximum 4 périphériques
+    \end{itemize}
+    
+    \item \textbf{SCSI (Small Computer System Interface)} :
+    \begin{itemize}
+        \item Interface professionnelle
+        \item Performances élevées
+        \item Support jusqu'à 15 périphériques
+        \item Utilisé dans les serveurs
+    \end{itemize}
+    
+    \item \textbf{SATA (Serial ATA)} :
+    \begin{itemize}
+        \item Successeur de l'IDE
+        \item Vitesse : 150-600 MB/s
+        \item Standard actuel pour HDD
+        \item Hot-swap supporté
+    \end{itemize}
+    
+    \item \textbf{NVMe (Non-Volatile Memory Express)} :
+    \begin{itemize}
+        \item Technologie la plus récente
+        \item Conçu pour SSD PCIe
+        \item Vitesse : jusqu'à 3500+ MB/s
+        \item Latence ultra-faible
+        \item Recommandé pour Windows 10/11
+        \item Meilleures performances I/O
+    \end{itemize}
+\end{enumerate}
+
+Le type \textbf{NVMe} est recommandé pour bénéficier des meilleures performances avec Windows 10.
+
+\subsection{Sélection du Disque}
+
+\textbf{Question 9 :} Expliquez le rôle de chacune des options.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/21.png}
+    \caption{Création d'un nouveau disque virtuel}
+    \label{fig:newdisk}
+\end{figure}
+
+\textbf{Réponse :}
+
+\begin{itemize}
+    \item \textbf{Create a new virtual disk} :
+    \begin{itemize}
+        \item Crée un nouveau fichier .vmdk vierge
+        \item Option standard pour une nouvelle VM
+        \item Taille définie à l'étape suivante
+    \end{itemize}
+    
+    \item \textbf{Use an existing virtual disk} :
+    \begin{itemize}
+        \item Réutilise un disque .vmdk existant
+        \item Utile pour migrer ou cloner des VMs
+        \item Permet de partager un disque entre VMs
+    \end{itemize}
+    
+    \item \textbf{Use a physical disk (for advanced users)} :
+    \begin{itemize}
+        \item Accès direct à un disque physique réel
+        \item Performances maximales
+        \item Dangereux : risque de corruption de données
+        \item Réservé aux utilisateurs experts
+        \item Utilisé pour dual-boot ou récupération
+    \end{itemize}
+\end{itemize}
+
+\subsection{Capacité du Disque}
+
+\textbf{Question 10 :} Expliquez la différence entre ces deux options.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/22.png}
+    \caption{Spécification de la capacité du disque : 60 GB}
+    \label{fig:disksize}
+\end{figure}
+
+Configuration du disque :
+\begin{itemize}
+    \item \textbf{Taille maximale} : 60,0 GB (recommandé pour Windows 10)
+    \item \textbf{Allocate all disk space now} : Coché
+    \item \textbf{Split virtual disk into multiple files} : Coché
+\end{itemize}
+
+\textbf{Réponse :}
+
+\begin{enumerate}
+    \item \textbf{Allocate all disk space now} :
+    \begin{itemize}
+        \item \textbf{Coché} : L'espace disque complet (60 GB) est alloué immédiatement
+        \item Avantages : Meilleures performances, pas de fragmentation
+        \item Inconvénients : Temps de création plus long, espace disque consommé immédiatement
+        \item \textbf{Non coché} : Allocation dynamique (thin provisioning)
+        \item L'espace augmente selon les besoins de la VM
+        \item Économise l'espace disque mais performances légèrement réduites
+    \end{itemize}
+    
+    \item \textbf{Store virtual disk as a single file vs Split into multiple files} :
+    \begin{itemize}
+        \item \textbf{Single file} : Un seul fichier .vmdk de 60 GB
+        \item Avantages : Gestion simplifiée, légèrement plus rapide
+        \item Inconvénients : Incompatible avec FAT32, difficile à déplacer
+        \item \textbf{Split into multiple files} : Plusieurs fichiers de 2 GB
+        \item Avantages : Compatible FAT32, facile à copier/déplacer
+        \item Inconvénients : Plusieurs fichiers à gérer
+    \end{itemize}
+\end{enumerate}
+
+Dans ce TP, nous avons choisi l'allocation complète et le fractionnement en plusieurs fichiers pour optimiser les performances et faciliter la portabilité.
+
+\subsection{Fichier du Disque}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/23.png}
+    \caption{Nom du fichier disque : Windows 10 x64.vmdk}
+    \label{fig:diskfile}
+\end{figure}
+
+Le disque virtuel de 60 GB sera créé avec le nom \texttt{Windows 10 x64.vmdk} dans le répertoire de la VM.
+
+\subsection{Récapitulatif et Création}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/24.png}
+    \caption{Récapitulatif de la configuration avant création}
+    \label{fig:summary}
+\end{figure}
+
+Récapitulatif de la configuration :
+\begin{itemize}
+    \item \textbf{Nom} : Windows 10 x64
+    \item \textbf{Version} : Workstation 17.5 ou ultérieure
+    \item \textbf{Système} : Windows 10 x64
+    \item \textbf{Disque dur} : 60 GB (Split, Pre-allocated)
+    \item \textbf{Mémoire} : 2048 MB
+    \item \textbf{Adaptateur réseau} : Host-only
+    \item \textbf{Démarrage automatique} : Activé
+\end{itemize}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/25.png}
+    \caption{Création du disque en cours}
+    \label{fig:creating}
+\end{figure}
+
+La création du disque pré-alloué de 60 GB prend quelques minutes.
+
+% ========================================
+% INSTALLATION DE WINDOWS 10
+% ========================================
+\section{Installation de Windows 10}
+
+\subsection{Avertissement de Sécurité}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/26.png}
+    \caption{Avertissement sur les mesures d'atténuation de canal latéral}
+    \label{fig:warning}
+\end{figure}
+
+VMware affiche un avertissement concernant les mesures de sécurité activées (side channel mitigations) qui améliorent la sécurité mais peuvent réduire légèrement les performances.
+
+\subsection{Sélection de la Version Windows}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/27.png}
+    \caption{Choix de la version Windows à installer}
+    \label{fig:winversion}
+\end{figure}
+
+Plusieurs versions de Windows 10 sont disponibles dans l'ISO :
+\begin{itemize}
+    \item Windows 10 PRO - COMPACT
+    \item Windows 10 SUPERLITE
+    \item Et d'autres versions optimisées (x64)
+\end{itemize}
+
+\subsection{Processus d'Installation}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/28.png}
+    \caption{Installation de Windows - Copie des fichiers (0\%)}
+    \label{fig:copying}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/29.png}
+    \caption{Windows Setup - Préparation}
+    \label{fig:getting_ready}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/30.png}
+    \caption{Message d'attente - Installation en cours}
+    \label{fig:wait}
+\end{figure}
+
+L'installation automatique de Windows 10 s'effectue grâce à la fonctionnalité Easy Install de VMware. Le processus peut prendre plusieurs minutes.
+
+\subsection{Premier Démarrage}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/31.png}
+    \caption{Écran de connexion Windows 10 - Utilisateur admin}
+    \label{fig:login}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/32.png}
+    \caption{Bureau Windows 10 x64 - Installation réussie}
+    \label{fig:desktop}
+\end{figure}
+
+L'installation de Windows 10 est terminée avec succès. Le système est maintenant opérationnel dans la machine virtuelle.
+
+% ========================================
+% CONFIGURATION FINALE
+% ========================================
+\section{Configuration Finale et Paramètres}
+
+\subsection{Informations de la VM}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{figures/33.png}
+    \caption{Résumé des informations de la VM dans la bibliothèque}
+    \label{fig:vminfo}
+\end{figure}
+
+Informations récapitulatives :
+\begin{itemize}
+    \item \textbf{RAM} : 2 GB
+    \item \textbf{Disque dur} : 60 GB (Preallocated)
+    \item \textbf{Adaptateur réseau} : Host-only
+\end{itemize}
+
+\subsection{Paramètres Détaillés}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/34.png}
+    \caption{Fenêtre Virtual Machine Settings - Configuration complète}
+    \label{fig:settings}
+\end{figure}
+
+Configuration matérielle complète :
+\begin{itemize}
+    \item \textbf{Mémoire} : 2 GB
+    \item \textbf{Processeurs} : 2
+    \item \textbf{Disque dur (NVMe)} : 60 GB Preallocated
+    \item \textbf{CD/DVD (SATA)} : Connecté au fichier ISO
+    \item \textbf{Adaptateur réseau} : Host-only
+\end{itemize}
+
+% ========================================
+% CONCLUSION
+% ========================================
+\section{Conclusion}
+
+Ce TP nous a permis d'acquérir des compétences pratiques et théoriques essentielles en virtualisation :
+
+\subsection{Compétences Acquises}
+
+\textbf{Partie 1 - Étude comparative :}
+\begin{itemize}
+    \item Compréhension des différences entre VMware Player, VMware Workstation Pro et VirtualBox
+    \item Analyse des critères de choix d'une solution de virtualisation
+    \item Connaissance des parts de marché et des cas d'usage
+\end{itemize}
+
+\textbf{Partie 2 - Installation pratique :}
+\begin{itemize}
+    \item Maîtrise de l'installation et configuration de VMware Workstation Pro 17
+    \item Création d'une machine virtuelle personnalisée avec configuration avancée
+    \item Compréhension des paramètres essentiels :
+    \begin{itemize}
+        \item Configuration processeur et mémoire
+        \item Types de réseau virtuels (NAT, Bridged, Host-only)
+        \item Types de disques (IDE, SCSI, SATA, NVMe)
+        \item Contrôleurs SCSI (BusLogic, LSI Logic, LSI Logic SAS)
+        \item Allocation de l'espace disque
+    \end{itemize}
+    \item Installation réussie de Windows 10 x64 dans l'environnement virtualisé
+\end{itemize}
+
+\subsection{Avantages de la Virtualisation Constatés}
+
+Au cours de ce TP, nous avons pu constater les nombreux avantages de la virtualisation :
+
+\begin{enumerate}
+    \item \textbf{Isolation} : Environnement sécurisé et isolé pour tester des applications ou systèmes
+    \item \textbf{Économie} : Pas besoin d'acheter du matériel supplémentaire
+    \item \textbf{Flexibilité} : Possibilité de tester différents OS sur la même machine
+    \item \textbf{Snapshots} : Sauvegarde et restauration rapides de l'état de la VM
+    \item \textbf{Portabilité} : Les VMs peuvent être facilement copiées et déplacées
+\end{enumerate}
+
+\subsection{Points Clés à Retenir}
+
+\begin{itemize}
+    \item La virtualisation matérielle (VT-x/AMD-V) doit être activée dans le BIOS
+    \item Le mode Custom offre un contrôle total sur la configuration de la VM
+    \item Le choix du type de réseau dépend du cas d'usage (isolation, accès Internet, visibilité réseau)
+    \item NVMe offre les meilleures performances pour les disques virtuels
+    \item L'allocation complète du disque améliore les performances mais consomme l'espace immédiatement
+    \item VMware Workstation Pro est une solution professionnelle complète pour la virtualisation
+\end{itemize}
+
+\subsection{Perspectives}
+
+Ce TP constitue une base solide pour :
+\begin{itemize}
+    \item Créer des environnements de test et développement
+    \item Mettre en place des architectures réseau virtuelles complexes
+    \item Préparer des serveurs virtualisés
+    \item Expérimenter avec différents systèmes d'exploitation
+    \item Développer des compétences en administration système
+\end{itemize}
+
+La maîtrise de la virtualisation est devenue une compétence indispensable pour tout professionnel de l'informatique, que ce soit pour le développement, l'administration système, ou la cybersécurité.
+
+% ========================================
+% RÉFÉRENCES
+% ========================================
+\section{Références}
+
+\begin{enumerate}
+    \item VMware Workstation Pro Documentation : \url{https://www.vmware.com/products/workstation-pro.html}
+    \item Guide d'installation Windows 10
+    \item Documentation technique VMware sur la virtualisation
+    \item Supports de cours - TP Virtualisation
+\end{enumerate}
+
+\end{document}

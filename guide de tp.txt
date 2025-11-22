@@ -1,0 +1,201 @@
+Voici le contenu complet des 5 images, assemblé en un seul document structuré :
+
+---
+
+**TP N°1 : INSTALLER ET CONFIGURER UNE MACHINE VIRTUELLE PERSONNALISÉE SUR VMWARE WORKSTATION Pro**
+
+---
+
+**Rendu :**
+
+1) Le rapport de chaque TP doit être commenté et documenté avec des copies écrans justifiantes les différentes étapes d'exécution du TP, ainsi des réponses bien expliquées aux questions posées (groupe de 3 toléré)  
+2) Le compte-rendu de ce TP doit être rendu au format électronique par email, après une période ne dépassant pas 15 jours à partir de la date de dépôt du TP.  
+3) Tous les comptes rendus identiques ou quasiment identiques ne seront pas acceptés  
+
+---
+
+**Objectifs du TP :**
+
+- **Etudier et comparer des outils de virtualisation.**  
+- **Créer et configurer une machine virtuelle personnalisée avec VMware Workstation Pro 16**  
+
+VMware Workstation est un programme qui vous permet de faire tourner une machine virtuelle sur votre ordinateur. L'intérêt d'avoir une machine virtuelle est multiple :  
+
+- [ ] Tester et utiliser une application sur différents OS pour les développeurs en particulier (Linux),  
+- [ ] Tester un OS sans formuler la machine physique  
+- [ ] Créer un petit réseau de plusieurs VMs (test des protocoles réseau, des règles de pare-feu.)  
+- [ ] Faire des tests de communications simples avec une deuxième machine  
+- [ ] Visiter des sites « louches » en toute sécurité,  
+- [ ] Tester les conséquences de tel ou tel virus...  
+
+---
+
+**TRAVAIL A FAIRE :**
+
+Cette activité est composée de deux parties :  
+
+**Partie 1 :**  
+Cette partie est consacrée à une étude théorique des distributions de VMWARE : VMware Player Free Edition, VMWARE WORKSTATION 16 PRO et Virtual Box  
+
+Vous devez effectuer, sous forme d'un tableau, une étude comparative de ces 3 distributions sur la base des critères suivants : types de virtualisation, Prérequis, OS supporté, fonctionnalités, sécurité, Part de marché  
+
+**Partie 2 :**  
+Cette partie consiste à réaliser un TP d’installation et configuration d’une machine virtuelle personnalisée “Custom (advanced)” sur un hyperviseur type 2 (VMWARE WORKSTATION 16 PRO) conforme à l’utilisation du Windows 10.
+
+La réalisation de cet atelier demande un ensemble de prérequis d’installation en termes logiciel et hardware :
+
+**I) Prérequis d’installation :**
+
+**A) Prérequis logiciel :**
+- La version d’essai « VMWARE WORKSTATION 16 PRO » est téléchargeable depuis le site officiel de l’éditeur “VMWARE” :
+  - https://www.vmware.com/products/workstation-pro/workstation-pro-evaluation.html
+  - Windows 10 64 bit est téléchargeable du lien suivant :
+https://www.maletal.com/teltecharge-vindows-10-optimement-lso-lien-direct/#Windows_10_version_21H1_Mail_2021
+
+**B) Prérequis Hardware :**
+- Avoir un ordinateur récent nettoyé, protégé et sécurisé.
+- Processeurs compatibles (64 bits de préférence) :
+  - Intel: Celeron, Pentium II, Pentium III, Pentium 4, Pentium M (incluant les ordinateurs avec la technologie mobile Centrino), Xeon (incluant “Prestonia”) AMD: Athlon, Athlon MP, Athlon XP, Duron, Opieron. Cadencé minimum à 1,3 G.Hz ou plus rapide NB : Les processeurs (Intel VT-x) ou AMD (AMD-V) intègrent d’office la technologie de virtualisation
+- Mémoire vive installée sur l’ordinateur hôte (machine physique) : Minimum 2 Go. Il est recommandé d’avoir au moins 4 Go de mémoire vive ou plus
+- Systèmes d’exploitation :
+  - Windows 10, Windows 8, Windows 7, Windows Vista, Windows XP SP3, Windows Server 2012, Windows Server 2008, Windows Server 2003 Standard, Windows XP, Édition Familiale SP2, Ubuntu 8.04 et versions ultérieures, Red Hat Enterprise Linux 4.5 et versions ultérieures, CentOS 5.0 et versions ultérieures, Oracle Linux 5.0 et versions ultérieures, openSUSE 10.2 et versions ultérieures, SUSE Linux 10 et versions ultérieures...
+- Disque dur physique : IDE, SATA,SCSI et NVMe avec un espace suffisant disponible sur votre disque dur dédié à VMWARE
+- Lecteur/Graveur optique CDROM et DVD: IDE, SCSI, image ISO
+- ISO Windows et IOS Ubuntu X
+- VMWARE WORKSTATION 16 PRO
+- Une connexion Internet au moment de l’installation.
+
+**II) Activation de la virtualisation du processeur logé sur la carte mère de l’ordinateur :**
+
+Cette phase peut être dépassée et vous passez directement à la phase III si la virtualisation est activée sur votre ordinateur.
+
+Lors du démarrage de l’ordinateur, le message affiché en bas de l’écran vous propose d’appuyer soit sur :
+Touche “Suppr” ou, Touche “O₂i” ou,Touche “F₂” ou,“Ctrl+Alt+Echap” ou,Touche “F₁” ou,Touche “F10” ou, “Ctrl+Alt+Suppr”...
+
+Remarque : Le délai d’affichage de ce message au démarrage de l’ordinateur est rapide, soyez attentif.
+
+Voici un extrait des touches d’accès au Bios par constructeur (les plus connus) selon la marque de l’ordinateur :
+- Acer
+- Compaq
+- HP Hewlett-Packard
+- Lenovo
+- Packard Bell
+- Sony
+- Toshiba
+- Asus
+- DELL
+- Samsung
+
+Sélectionner ou cliquer l’onglet intitulé "Advanced" (ou "Advanced Features" ou "Advanced Bios Features") puis de la même façon sélectionner l’onglet "CPU" (ou "CPU Features" : Unité Centrale de Traitement)
+Un menu à choix apparaît pour pouvoir activer l’option "Intel VT-d" ou "AMD-V" du style "enabled" (activé) ou "desabled" (désactivé)
+Enfin, valider cette configuration "Bios" :
+1) Une touche de fonction "F10" du clavier donne le message informatif de : sauvegarder (Save) et quitter (Exit) le "Bios",
+2) Dans le menu du "Bios", il y a des boutons "Quitter" ou "Exit" qui peut être sélectionnés par des touches curseurs du clavier et afficheront un message sous forme de menu de sauvegarder (Save) et quitter (Exit) le "Bios",
+3) Une redémarrage de l’ordinateur est nécessaire pour terminer cette étape ! Le screenshot correspondant à l’activation du « Virtualization Technology » en BIOS ressemble à celui ci-dessous :
+
+Comment activer la virtualisation, si disponible, mais désactivée sur PC Windows 10 ?
+1) Cliquez sur le bouton Démarrer le bouton de l’indicateur et sélectionnez Paramètres.
+2) Sélectionnez Mise à jour et sécurité.
+3) Cliquez sur Récupération dans le menu de gauche.
+4) Sous Démarrage avancé, cliquez sur Redémarrer maintenant.
+5) Sélectionnez Résoudre les problèmes.
+6) Sélectionnez Options avancées.
+7) Sélectionnez Paramètres du microprogramme UEFI.
+8) Cliquez sur Redémarrer pour redémarrer le système et entrez UEFI (BIOS).
+
+**III) Installation et création de la machine virtuelle (VM).**
+
+1) **Créer une VM personnalisée "Custom [advanced]" sous VMware Workstation 16 PRO**  
+VMware Workstation Pro 16 s'installe normalement comme les autres logiciels dans Windows.  
+Procédez comme suit :  
+Lancez le fichier setup ou « VMware-workstation-full-16.1.2-17966106» de VMware Workstation Pro que vous avez téléchargé.  
+
+**Question 1** : Défaillez sous formes de captures écrans les étapes de l'installation VMware Workstation Pro 16 sous Windows 10.  
+Après l'installation de « VMware Workstation 16 PRO », effectuez les étapes suivantes :  
+- Cliquer sur le carré de gauche « Create a New Virtual Machine ».  
+- Ou cliquer sur « File » en haut à gauche de la fenêtre puis « New Virtual Machine... ».  
+- Ou taper la combinaison « Ctrl+N » sur votre clavier.  
+
+2) **Choisir le type de machines virtuelle (VM)**  
+Choisissez le choix du type « Custom [Advanced] » dans cet atelier afin de détailler en plus la configuration et de création de votre VM.  
+
+**Question 2** : Quelle la différence entre les 2 types de VM « Typical » et « Custom » ?  
+
+3) **Sélectionner le dernier niveau "Hardware" compatible**  
+VMware Workstation offre différentes compatibilités hardwares avec certains produits et limite certaines compatibilités.  
+Le choix du niveau de compatibilité hardware est VMware Workstation 16.  
+
+4) **Sélectionner le type de système d'exploitation à installer**  
+Ici, sélectionner "I will Install the operating system later"  
+Deux méthodes sont possibles pour ajouter le système d'exploitation à installer sur la VM: « disc » et « disc image file (iso) ».  
+
+**Question 3** : Quelle la différence entre ces deux méthodes ?  
+
+5) **Définir le type de système d'exploitation**  
+VMware Workstation demande le choix du nom et du modèle de système d'exploitation à installer plus tard.  
+Cochez ensuite le système d'exploitation que vous souhaitez installer ainsi que sa version  
+Choisissez « Microsoft Windows » et version « Windows 10 (64 bits) »  
+
+**Question 4** : A quoi sert cette étape lors de la définition du système d'exploitation ? et que signifie le choix « Other » ?  
+
+Après avoir choisi le système d'exploitation, vous devez entrer les informations relatives à votre système  
+
+6) **Nommer et stocker la machine virtuelle**  
+VMware Workstation demande de nommer la machine virtuelle crée et de spécifier la destination où elle sera stockée. Nommez le « VM1-Windows 10 » et spécifiez une destination de votre disque.  
+
+7) **Sélectionner le périphérique de démarrage BIOS ou EFI**  
+Les types de périphérique de démarrage BIOS et EFI permettent au système d'exploitation de détecter le matériel virtuel.  
+Choisissez par défaut qui est le « BIOS » car il s'agit d'un firmeware le plus répandu et le plus connu du grand public.  
+
+**Question 5** : Quelle est la différence entre ces types de périphérique de démarrage BIOS et EFI ?  
+
+8) **Choisir la configuration du ou des processeurs**  
+Choisissez le nombre de processeurs que vous souhaitez ajouter à la machine virtuelle ainsi que leurs configurations (en nombre de cœurs). (Number of Processors = 1 et Number Of cores per processor = 2)
+
+NB : Ne pas surévaluer le besoin, les processus physiques seront surchargés. Le nombre de processus maximum disponible selon la version de hardware défini dans la partie « Choisir le niveau de hardware compatible ».
+
+9) **Choisir le montant de mémoire (RAM)**  
+Choisissez le montant de mémoire vive (RAM) « 2048 Mo » à ajouter à la VM.
+
+10) **Choisir le type de configuration réseau**  
+Dans ce cas, choisissez la configuration « Use host-only networking ».  
+
+**Question 6** : Expliquez la différence entre les quatre types de réseau de la machine virtuelle « Use bridged networking », « Use network address translation (NAT) », « Use host-only networking » et « Do not use a network connection » ?
+
+11) **Choisir le type de contrôleur SCSI**  
+Choisissez selon chaque ordinateur, le type de contrôleur SCSI « LSI Logic SAS » recommandé par le système qui va contrôler la fréquence entrée/sortie de votre disque virtuel.  
+
+**Question 7** : Expliquez la différence entre les types de contrôleurs « BusLogic », « LSI Logic » et « LSI Logic SAS » ?
+
+12) **Choisir le type de disque dur virtuel**  
+Choisissez le type de disque dur virtuel recommandé par défaut par votre VMware Workstation : NVMe (Recommended)  
+
+**Question 8** : Définissez et expliquez le rôle de chaque type de disque IDE, SCSI, SATA et NVMe?
+
+13) **Choisir le disque dur à utiliser**  
+Choisissez « Create a new virtual disk » pour créer un nouveau disque dur virtuel dédié à votre machine virtuelle.  
+
+**Question 9** : Expliquez le rôle de chacune des options « Use an existing virtual disk » et « Use a physical disk (for advanced user) » ?
+
+14) **Définir la taille du disque dur virtuel**  
+VMware Workstation permet de définir la taille du disque dur choisi (en Gb) toujours selon les besoins. Allouez au moins 20 Gb au disque dur virtuel et cochez la case « Store virtual disk as a single file » Le screenshot correspondant à cette étape affiche autres options de choix telles que « Allocate all disk space now » et « Split virtual disk into multiple files ».  
+
+**Question 10** : Expliquez la différence entre ces deux options ?
+
+15) **Stocker le disque dur virtuel**  
+Dans cette étape, VMware Workstation demande le chemin de stockage des disques durs virtuels de la machine. Nommez et stockez votre machine virtuelle.  
+L’extension des fichiers qui permet de simuler les disques durs virtuels est de la forme « .VMDK » Le chemin où sont stockés les fichiers. VMDK est le répertoire dans lequel la machine virtuelle est enregistrée par défaut qui est défini dans l’étape « Nommer et stocker la machine virtuelle ».
+
+16) **Paramétrer/Modifier la machine virtuelle**  
+La machine virtuelle personnalisée est maintenant prête ! L’assistant de création VMware Workstation affiche un court récapitulatif de la configuration définie dans les étapes précédentes.  
+L’icône « Customize Hardware... » permet de modifier la configuration paramétrée durant les étapes précédentes. Elle peut être modifiée aussi à tout moment par sélection de la VM et clique sur l’onglet « VM » puis « Settings... ».
+
+17) **Ajout du fichier .ISO du système d’exploitation**  
+Cliquez sur « Customize Hardware... », rendez-vous au « New CD/DVD (SATA) » et cochez la case « .Use ISO image file : ». Ce qui permet d’aller rechercher le fichier du système d’exploitation au format .ISO. Cliquez sur « Close » puis sur « Finish » pour conclure la création de votre machine virtuelle.
+
+18) **Machine virtuelle prête à l’utilisation**  
+Une fois la machine virtuelle est créée, l’icône « Power on this virtual machine » permet la lancer et commencer son utilisation et la procédure d’installation Windows démarrera.
+
+19) **Faire une conclusion de réalisation de ce qui a découvert en TP.**
+
+---
